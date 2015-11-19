@@ -4,7 +4,7 @@ ActiveRecord::Base.establish_connection :test
 class CreateAllTables < ActiveRecord::Migration
   def self.up
     create_table(:posts) do |t|
-      t.text :ext_filed
+      t.text :ext_field
     end
   end
 end

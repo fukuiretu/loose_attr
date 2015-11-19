@@ -9,7 +9,7 @@ module LooseAttr
     end
 
     module ClassMethods
-      # classへの変換はおいおい
+      # TODO: https://github.com/fukuiretu/loose_attr/issues/2
       def loose_attr(name, default_value: nil)
         # read attr
         define_method name.to_s do
@@ -26,18 +26,16 @@ module LooseAttr
     private
 
       def hashed_ext
-        @hashed_ext ||= Hashie::Mash.new
+        @hashed_ext ||= ::Hashie::Mash.new
       end
 
       def set_ext_field
-        self.ext_field = hashed_extension.to_json if hashed_extension.present?
+        self.ext_field = hashed_ext.to_json if hashed_ext.present?
       end
 
       def set_hashed_ext
         ext_field = read_attribute(:ext_field)
-        if ext_field.present?
-          @hashed_extension = Hashie::Mash.new(JSON.parse(ext_field))
-        end
+        @hashed_ext = ::Hashie::Mash.new(JSON.parse(ext_field)) if ext_field.present?
       end
   end
 end

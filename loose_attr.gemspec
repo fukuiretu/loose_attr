@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activerecord", ["> 3.0", "< 5.0"]
   spec.add_dependency "hashie"
+  spec.add_dependency "wannabe_bool"
 end

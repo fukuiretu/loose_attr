@@ -10,10 +10,11 @@ module LooseAttr
 
     module ClassMethods
       # TODO: https://github.com/fukuiretu/loose_attr/issues/2
-      def loose_attr(name, default_value: nil)
+      def loose_attr(name, cast_type: :string, default_value: nil)
         # read attr
         define_method name.to_s do
-          hashed_ext.send(name.to_s) || default_value
+          value = hashed_ext.send(name.to_s) || default_value
+          cast(value, cast_type)
         end
 
         # write attr
@@ -36,6 +37,19 @@ module LooseAttr
       def set_hashed_ext
         ext_field = read_attribute(:ext_field)
         @hashed_ext = ::Hashie::Mash.new(JSON.parse(ext_field)) if ext_field.present?
+      end
+
+      def cast(value, cast_type)
+        return nil if value.blank?
+
+        case cast_type
+        when :string
+          value.to_s
+        when :integer
+          value.to_i
+        when :boolean
+          value.to_b
+        end
       end
   end
 end

@@ -9,16 +9,15 @@ module LooseAttr
     end
 
     module ClassMethods
-      # TODO: https://github.com/fukuiretu/loose_attr/issues/2
       def loose_attr(name, cast_type: :string, default_value: nil)
         # read attr
-        define_method name.to_s do
+        define_method name do
           value = hashed_ext.send(name.to_s) || default_value
           cast(value, cast_type)
         end
 
         # write attr
-        define_method "#{name.to_s}=" do |value|
+        define_method "#{name}=" do |value|
           hashed_ext.send("#{name}=", value)
         end
       end

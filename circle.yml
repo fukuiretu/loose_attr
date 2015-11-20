@@ -13,6 +13,9 @@ dependencies:
   override:
     - bundle install -j4 --path vendor/bundle
 
+database:
+  override:
+
 test:
   override:
     - bundle exec rake spec

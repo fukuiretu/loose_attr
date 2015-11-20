@@ -15,6 +15,7 @@ dependencies:
 
 database:
   override:
+    - echo skip
 
 test:
   override:

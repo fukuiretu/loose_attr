@@ -6,6 +6,10 @@ class CreateAllTables < ActiveRecord::Migration
     create_table(:posts) do |t|
       t.text :ext_field
     end
+
+    create_table(:articles) do |t|
+      t.text :ext_field_renamed
+    end
   end
 end
 

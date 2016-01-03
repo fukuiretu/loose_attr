@@ -9,6 +9,11 @@ class Post < ActiveRecord::Base
   loose_attr :boolean_cast, cast_type: :boolean
 end
 
+class Article < ActiveRecord::Base
+  loose_attr :hoge,   default_value: '1'
+  modify_loose_attr_column_name :ext_field_renamed
+end
+
 describe LooseAttr do
   it 'has a version number' do
     expect(LooseAttr::VERSION).not_to be nil
@@ -50,5 +55,12 @@ describe LooseAttr do
     expect(post.str_cast).to eq('1')
     expect(post.integer_cast).to eq(2)
     expect(post.boolean_cast).to eq(false)
+  end
+
+  it 'modified ext' do
+    article = Article.new
+
+    expect(Article.method_defined?(:ext_field_renamed)).to eq(true)
+    expect(article.hoge).to eq('1')
   end
 end

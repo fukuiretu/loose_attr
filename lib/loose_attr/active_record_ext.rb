@@ -21,6 +21,14 @@ module LooseAttr
           hashed_ext.send("#{name}=", value)
         end
       end
+
+      def modify_loose_attr_column_name(name)
+        @loose_attr_column_name = name.to_sym
+      end
+
+      def loose_attr_column_name
+        @loose_attr_column_name ||= 'ext_field'
+      end
     end
 
     private
@@ -30,11 +38,11 @@ module LooseAttr
       end
 
       def set_ext_field
-        self.ext_field = hashed_ext.to_json if hashed_ext.present?
+        self.send("#{self.class.loose_attr_column_name}=", hashed_ext.to_json) if hashed_ext.present?
       end
 
       def set_hashed_ext
-        ext_field = read_attribute(:ext_field)
+        ext_field = read_attribute(self.class.loose_attr_column_name)
         @hashed_ext = ::Hashie::Mash.new(JSON.parse(ext_field)) if ext_field.present?
       end
 

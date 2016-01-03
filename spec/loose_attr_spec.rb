@@ -7,6 +7,12 @@ class Post < ActiveRecord::Base
   loose_attr :str_cast, cast_type: :string
   loose_attr :integer_cast, cast_type: :integer
   loose_attr :boolean_cast, cast_type: :boolean
+  loose_attr(
+    :date_cast,
+    cast_type: :date,
+    default_value: '2016-01-01 00:00:00',
+    option: { format: '%Y-%m-%d %H:%M:%S' }
+  )
 end
 
 class Article < ActiveRecord::Base
@@ -55,6 +61,12 @@ describe LooseAttr do
     expect(post.str_cast).to eq('1')
     expect(post.integer_cast).to eq(2)
     expect(post.boolean_cast).to eq(false)
+  end
+
+  it 'return date formated' do
+    post = Post.new
+
+    expect(post.date_cast).to eq(DateTime.strptime('2016-01-01 00:00:00', '%Y-%m-%d %H:%M:%S').in_time_zone)
   end
 
   it 'modified ext' do

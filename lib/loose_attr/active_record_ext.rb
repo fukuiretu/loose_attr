@@ -9,11 +9,11 @@ module LooseAttr
     end
 
     module ClassMethods
-      def loose_attr(name, cast_type: :string, default_value: nil)
+      def loose_attr(name, cast_type: :string, default_value: nil, option: {})
         # read attr
         define_method name do
           value = hashed_ext.send(name.to_s) || default_value
-          cast(value, cast_type)
+          cast(value, cast_type, option)
         end
 
         # write attr
@@ -46,7 +46,7 @@ module LooseAttr
         @hashed_ext = ::Hashie::Mash.new(JSON.parse(ext_field)) if ext_field.present?
       end
 
-      def cast(value, cast_type)
+      def cast(value, cast_type, option)
         return nil if value.blank?
 
         case cast_type
@@ -56,6 +56,8 @@ module LooseAttr
           value.to_i
         when :boolean
           value.to_b
+        when :date
+          DateTime.strptime(value, option[:format]).in_time_zone
         end
       end
   end
